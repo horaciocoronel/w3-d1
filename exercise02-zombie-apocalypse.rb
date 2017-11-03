@@ -1,3 +1,4 @@
+require "pry"
 class Zombie
   @@horde = []
   #This value will increase over time.
@@ -33,6 +34,9 @@ class Zombie
       next_strength = rand(@@max_strength)
       @@horde << Zombie.new(next_speed, next_strength)
       puts "You became a Zombie yourself!"
+    elsif @@horde == nil
+      binding.pry
+        puts "nilllll"
     end
   end
   def outrun_zombie?
@@ -45,6 +49,7 @@ class Zombie
   def survive_attack?
     if @@strength > rand(@@max_strength)
       return true
+
     else
       return false
     end
@@ -54,10 +59,11 @@ class Zombie
     return @@horde
   end
   def self.spawn
-    zombies = rand(@@plague_level)
+    zombies = rand(1..@@plague_level)
     zombies.times do
       next_speed = rand(@@max_speed)
       next_strength = rand(@@max_strength)
+      # binding.pry
       @@horde << Zombie.new(next_speed, next_strength)
     end
   end
@@ -67,20 +73,24 @@ class Zombie
     self.incrase_plague_level
   end
   def self.incrase_plague_level
-    @@plague_level + rand(2)
+    @@plague_level += rand(2)
   end
   def self.some_die_off
-    rand(11).times do @@horde.delete_at(0)
-    end
+    # rand(11).times do @@horde.delete_at(0)
+    @@horde.shift(rand(11)+1)
+
   end
 
 end #Class ends
-puts Zombie.all.inspect # []
+# puts Zombie.all.inspect # []
 Zombie.new_day
 # puts Zombie.all.inspect # [#<Zombie:0x005626ecc5ebd0 @speed=4, @strength=0>, #<Zombie:0x005626ecc5eba8 @speed=0, @strength=4>, #<Zombie:0x005626ecc5eb80 @speed=4, @strength=4>]
 zombie1 = Zombie.all[0]
 zombie2 = Zombie.all[1]
 zombie3 = Zombie.all[2]
+puts zombie1
+puts zombie2
+puts zombie3
 puts zombie1.encounter # You are now a zombie
 puts zombie2.encounter # You died
 puts zombie3.encounter # You died
